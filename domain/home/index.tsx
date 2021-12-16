@@ -41,7 +41,12 @@ export function Home({ datas, totalPrice }: { datas: any; totalPrice: any }) {
           <Flex justifyContent="space-between">
             <HStack>
               <Text fontWeight="bold">Нийт зарагдсан барааны үнэ:</Text>
-              <Text color="green">{totalPrice.totalPrice}₮</Text>
+              <Text color="green">
+                {Intl.NumberFormat("ja-JP", {
+                  style: "currency",
+                  currency: "MNT",
+                }).format(totalPrice.totalPrice)}
+              </Text>
             </HStack>
             <Input
               type="number"
