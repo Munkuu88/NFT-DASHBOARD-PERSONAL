@@ -8,6 +8,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 import { useState, useEffect } from "react";
+import moment from "moment";
 
 const Detail = ["UserName", "Phone", "title", "price", "createdAt", "ID"];
 
@@ -78,7 +79,9 @@ export function Home({ datas, totalPrice }: { datas: any; totalPrice: any }) {
                   <GridItem>{el.phoneNumber}</GridItem>
                   <GridItem>{el.title}</GridItem>
                   <GridItem>{el.price}</GridItem>
-                  <GridItem>{el.createdAt}</GridItem>
+                  <GridItem>
+                    {moment(el.createdAt).format("YYYY-MM-DD HH:mm")}
+                  </GridItem>
                   <GridItem>{el.id}</GridItem>
                 </Grid>
               );
