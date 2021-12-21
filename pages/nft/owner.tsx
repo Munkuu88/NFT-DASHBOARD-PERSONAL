@@ -5,7 +5,7 @@ import { Owners } from "../../domain/nft/owner";
 
 const HomePage: NextPage = () => {
   let datas = []
-  datas = useAxios("http://localhost:5000/nft1003/analytic/info/nft/owner");
+  datas = useAxios("https://api.nft.mn/nft1003/analytic/info/nft/owner");
 
   console.log(datas);
   return <Owners datas={datas}  />;
