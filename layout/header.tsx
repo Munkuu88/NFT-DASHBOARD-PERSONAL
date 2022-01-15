@@ -14,10 +14,9 @@ export function Header() {
           Хэрэлэгчид
         </Text>
       </Link>
-
       <Link href="/nft/owner">
         <Text border="1px solid black" p="10px" cursor="pointer">
-          Бурхдын хот NFT эзэмшигчид
+          NFT борлуулалт
         </Text>
       </Link>
     </HStack>
