@@ -19,13 +19,14 @@ const HomePage: NextPage = () => {
   useEffect(() => {
     setLoader(true)
     setData([])
-    axios.get("https://nft-analytic-system.herokuapp.com/nft/owners/" + id)
+    axios.get("/nft/owners/"+id)
       .then(res => {
         setData(res.data)
       })
       .finally(() => setLoader(false))
   }, [id])
 
+  //TODO: Analytic collection name id awdag route beltgene
   collections = useAxios("https://api.nft.mn/nft1003/v1/nft/collection");
 
   return (
