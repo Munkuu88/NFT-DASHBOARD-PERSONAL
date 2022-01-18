@@ -9,7 +9,7 @@ export function Header() {
           Хэрэлэгчид
         </Text>
       </Link>
-      <Link href="/nft/owner">
+      <Link href="/">
         <Text border="1px solid black" p="10px" cursor="pointer">
           NFT борлуулалт
         </Text>

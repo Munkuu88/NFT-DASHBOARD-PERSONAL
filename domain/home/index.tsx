@@ -7,7 +7,7 @@ import {
   HStack,
   Text,
 } from "@chakra-ui/react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import moment from "moment";
 
 const Detail = ["UserName", "Phone", "title", "price", "createdAt", "ID"];
@@ -22,7 +22,6 @@ const DetailName = ({ detail }: { detail: string }) => {
 
 export function Home({ datas, totalPrice }: { datas: any; totalPrice: any }) {
   if (!datas) return null;
-  console.log("pp", datas);
   const [name, setName] = useState("");
 
   return (

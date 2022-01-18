@@ -1,7 +1,9 @@
 import { Divider, Flex, HStack, Text, VStack, Wrap, } from "@chakra-ui/react"
+import { LayoutProps } from "framer-motion"
 import { Card } from "../../components/Card"
+import { OwnerProps } from "../../interface/react.default"
 
-export function Owners({ datas }: any) {
+export function Owners({ datas }: OwnerProps) {
   return <Flex flexDirection={'column'}>
     {datas.map((owner: any, ind: number) => {
       return <VStack mb={'6'} key={owner.id + ind}>
