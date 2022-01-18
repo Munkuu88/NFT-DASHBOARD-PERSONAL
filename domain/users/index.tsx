@@ -4,24 +4,17 @@ import {
   GridItem,
   Flex,
   Input,
-  HStack,
-  Text,
-  Button,
   Divider,
+  InputGroup,
+  InputLeftAddon,
+  InputRightAddon,
+  Button,
 } from "@chakra-ui/react";
 import axios from "axios";
+import moment from "moment";
 import { useEffect, useState } from "react";
-import ReactPaginate from "react-paginate";
-
-const Detail = ["UserName", "Phone", "ID"];
-
-const DetailName = ({ detail }: { detail: string }) => {
-  return (
-    <GridItem fontSize="xl" fontWeight="semibold">
-      {detail}
-    </GridItem>
-  );
-};
+import { Pagination } from "../../components/Pagination";
+import { SearchIcon } from "@chakra-ui/icons";
 
 export function AllUsers() {
   const limit = 150
@@ -29,103 +22,78 @@ export function AllUsers() {
   const [count, setCount] = useState(0);
   const [page, setPage] = useState(0);
   const [loader, setLoader] = useState(false);
-
   const [name, setName] = useState("");
-  let timeout: any = null
-
+  const [refresh, setRefresh] = useState(false);
   useEffect(() => {
     setLoader(true);
     setUsers([])
 
-    if (timeout) clearTimeout(timeout)
-    timeout = setTimeout(() => {
-      axios.post("/users", {
-        page: page,
-        limit,
-        s: name,
-        sort: "DESC",
-        sortBy: "createdAt"
+    axios.post("/users", {
+      page: page,
+      limit,
+      s: name,
+      sort: "DESC",
+      sortBy: "createdAt"
+    })
+      .then(({ data }) => {
+        console.log(data)
+        setCount(data.count);
+        setUsers(data.result);
       })
-        .then(({ data }) => {
-          console.log(data)
-          setCount(data.count);
-          setUsers(data.result);
-        })
-        .catch((err) => {
-          console.log(err)
-        }
-        ).finally(() => setLoader(false));
-    }, 2000)
-  }, [name, page])
+      .catch((err) => {
+        console.log(err)
+      }
+      ).finally(() => setLoader(false));
+
+  }, [refresh, page])
+
+  const inputChange = (e: any) => {
+    setPage(0);
+    setName(e.target.value)
+  }
+  const submitChange = (e: any) => {
+    e.preventDefault();
+    setPage(0);
+    setRefresh(!refresh)
+  }
 
   return (
-    <Flex w="100%" maxW="2000px" justifyContent="center">
-      <Box w="70%">
-        <Flex flexDir="column">
-          <Grid
-            gap={4}
-            templateColumns="repeat(3, 1fr)"
-            py="20px"
-            borderBottom="1px solid black"
-          >
-            {Detail.map((el, ind) => {
-              return <DetailName detail={el} key={ind} />;
-            })}
+    <>
+      <Box as={'form'} onSubmit={submitChange} mx="auto" my="6" w="50%">
+        <InputGroup>
+          <Input placeholder="Утас, нэр, нэвтрэх нэрээр нь хайж олоорой." onChange={inputChange} />
+          <InputRightAddon p="0" children={<Button w="100%" type="submit">Хайх</Button>} />
+        </InputGroup>
+      </Box>
+      <Flex w="100%" maxW="2000px" justifyContent="center">
+        <Flex width={"80%"} flexDir="column">
+          <Grid bg="rgba(0,0,0,0.5)" color="white" gap={4} templateColumns="repeat(6, 1fr)">
+            <GridItem textAlign={"center"}>Нэвтрэх нэр</GridItem>
+            <GridItem>Нэр</GridItem>
+            <GridItem>Овог</GridItem>
+            <GridItem>Утасны дугаар</GridItem>
+            <GridItem>Статус</GridItem>
+            <GridItem>Бүртгүүлсэн огноо</GridItem>
           </Grid>
-          <Flex justifyContent="space-between">
-            <HStack>
-              <Text fontWeight="bold">Нийт хэрэлэгч:</Text>
-              <Text color="green">{count}</Text>
-            </HStack>
-            <Input
-              type="text"
-              placeholder="Search"
-              my="20px"
-              w="20%"
-              value={name}
-              onChange={(event) => {
-                setName(event.target.value);
-              }}
-            />
-          </Flex>
           {users.map((el: any, ind: number) => {
             return (
-              <Grid key={ind} gap={4} templateColumns="repeat(3, 1fr)">
-                <GridItem>{el.userName}</GridItem>
+              <Grid borderBottom={"1px solid black"} key={ind} gap={4} templateColumns="repeat(6, 1fr)">
+                <GridItem textAlign={"center"}>{el.userName}</GridItem>
+                <GridItem>{el.firstName}</GridItem>
+                <GridItem>{el.lastName}</GridItem>
                 <GridItem>{el.phoneNumber}</GridItem>
-                <GridItem>{el.id}</GridItem>
+                <GridItem>{(el.user_status) ? "Идэвхитэй" : "Идэвхигүй"}</GridItem>
+                <GridItem>{moment(el.createdAt).format("YYYY-MM-DD HH:mm")}</GridItem>
               </Grid>
             );
           })}
-
           <Box w="100%" textAlign={"center"}>
             {loader && "Уншиж байна..."}
             <Divider />
-            <Pagination {...{ page, setPage, length: Math.floor(count/limit) }} />
+            <Pagination {...{ page, setPage, length: Math.floor(count / limit) }} />
           </Box>
         </Flex>
-      </Box>
-    </Flex>
+      </Flex>
+    </>
   );
-}
-
-
-const Pagination = ({ length, page, setPage }: any) => {
-  const [pages, setPages] = useState(Array(length).fill(0))
-
-  const changePage = (e:any) => {
-    console.log(e.target.value)
-    setPage(Number(e.target.value))
-  }
-  useEffect(() => {
-    setPages(Array(length).fill(0))
-  }, [page,length])
-
-  return (
-    <Box my="6">
-      {pages.map((el: any, ind: number) => <Button mx="2" value={ind} onClick={changePage} key={ind+el} colorScheme={(page === ind) ? "orange" : "blue" }>{ind+1}</Button>)}
-    </Box>
-  )
-
-
 }
