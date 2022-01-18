@@ -6,7 +6,6 @@ import {
   Input,
   Divider,
   InputGroup,
-  InputLeftAddon,
   InputRightAddon,
   Button,
 } from "@chakra-ui/react";
@@ -14,7 +13,6 @@ import axios from "axios";
 import moment from "moment";
 import { useEffect, useState } from "react";
 import { Pagination } from "../../components/Pagination";
-import { SearchIcon } from "@chakra-ui/icons";
 
 export function AllUsers() {
   const limit = 150
