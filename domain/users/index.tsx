@@ -6,6 +6,8 @@ import {
   Input,
   HStack,
   Text,
+  Button,
+  Divider,
 } from "@chakra-ui/react";
 import axios from "axios";
 import { useEffect, useState } from "react";
@@ -22,22 +24,24 @@ const DetailName = ({ detail }: { detail: string }) => {
 };
 
 export function AllUsers() {
+  const limit = 150
   const [users, setUsers] = useState([]);
   const [count, setCount] = useState(0);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [loader, setLoader] = useState(false);
 
   const [name, setName] = useState("");
   let timeout: any = null
 
   useEffect(() => {
-    if (timeout) clearTimeout(timeout)
     setLoader(true);
     setUsers([])
+
+    if (timeout) clearTimeout(timeout)
     timeout = setTimeout(() => {
       axios.post("/users", {
-        page: page-1,
-        limit: 50,
+        page: page,
+        limit,
         s: name,
         sort: "DESC",
         sortBy: "createdAt"
@@ -51,9 +55,8 @@ export function AllUsers() {
           console.log(err)
         }
         ).finally(() => setLoader(false));
-    }, 3000)
-
-  }, [name,page])
+    }, 2000)
+  }, [name, page])
 
   return (
     <Flex w="100%" maxW="2000px" justifyContent="center">
@@ -65,7 +68,7 @@ export function AllUsers() {
             py="20px"
             borderBottom="1px solid black"
           >
-            {(loader) ? "Уншиж " : Detail.map((el, ind) => {
+            {Detail.map((el, ind) => {
               return <DetailName detail={el} key={ind} />;
             })}
           </Grid>
@@ -74,17 +77,6 @@ export function AllUsers() {
               <Text fontWeight="bold">Нийт хэрэлэгч:</Text>
               <Text color="green">{count}</Text>
             </HStack>
-            <ReactPaginate
-              breakLabel="..."
-              nextLabel="next >"
-              pageRangeDisplayed={5}
-              onPageChange={(e:any) => {
-                console.log(e)
-                setPage(e.selected)
-              }}
-              pageCount={5}
-              previousLabel="< previous"
-            />
             <Input
               type="text"
               placeholder="Search"
@@ -105,8 +97,35 @@ export function AllUsers() {
               </Grid>
             );
           })}
+
+          <Box w="100%" textAlign={"center"}>
+            {loader && "Уншиж байна..."}
+            <Divider />
+            <Pagination {...{ page, setPage, length: Math.floor(count/limit) }} />
+          </Box>
         </Flex>
       </Box>
     </Flex>
   );
+}
+
+
+const Pagination = ({ length, page, setPage }: any) => {
+  const [pages, setPages] = useState(Array(length).fill(0))
+
+  const changePage = (e:any) => {
+    console.log(e.target.value)
+    setPage(Number(e.target.value))
+  }
+  useEffect(() => {
+    setPages(Array(length).fill(0))
+  }, [page,length])
+
+  return (
+    <Box my="6">
+      {pages.map((el: any, ind: number) => <Button mx="2" value={ind} onClick={changePage} key={ind+el} colorScheme={(page === ind) ? "orange" : "blue" }>{ind+1}</Button>)}
+    </Box>
+  )
+
+
 }
