@@ -27,7 +27,7 @@ const HomePage: NextPage = () => {
   }, [id])
 
   //TODO: Analytic collection name id awdag route beltgene
-  collections = useAxios("https://api.nft.mn/nft1003/v1/nft/collection");
+  collections = useAxios("/nft/collection");
 
   return (
     <>

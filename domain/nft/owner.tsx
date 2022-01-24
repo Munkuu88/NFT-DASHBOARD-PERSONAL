@@ -15,6 +15,10 @@ export function Owners({ datas }: OwnerProps) {
           <Text fontWeight='bold'>Нийт авсан NFT:</Text>
           <Text>{owner.totalContent}</Text>
         </HStack>
+        <HStack justifyContent="space-between">
+          <Text fontWeight='bold'>Утасны дугаар:</Text>
+          <Text>{owner.phoneNumber}</Text>
+        </HStack>
         <Wrap justifyContent="space-between" >
           {owner.contents.map((content: any, ind: number) => {
             return <Card image={content.poster || content.mediaLink}>{content.title}</Card>

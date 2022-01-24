@@ -4,8 +4,8 @@ import { Layout } from "../layout/index";
 import axios from "axios";
 
 function MyApp({ Component, pageProps }: AppProps) {
-  axios.defaults.baseURL = "https://nft-analytic-system.herokuapp.com";
-  // axios.defaults.baseURL = "http://localhost:7006";
+  // axios.defaults.baseURL = "https://nft-analytic-system.herokuapp.com";
+  axios.defaults.baseURL = "http://localhost:5000";
   return <Layout Component={Component} pageProps={pageProps} />;
 }
 
